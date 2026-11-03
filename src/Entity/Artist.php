@@ -12,7 +12,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     normalizationContext:['groups'=>['artist:read']],
     denormalizationContext:['groups'=>['artist:write']],
-    paginationEnabled: false
+    paginationEnabled: false,
+    security: "is_granted('ROLE_USER')", // Nécessite une authentification pour accéder à cette ressource
+    securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getId() == user.getId()" // Contrôle après la désérialisation
 )]
 class Artist
 {
